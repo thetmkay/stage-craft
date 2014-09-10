@@ -1,0 +1,24 @@
+table.stage-craft-table .post-quantity {
+	width: 70px;
+}
+
+table.stage-craft-table .post-quantity input {
+	width: 40px;
+}
+
+table.stage-craft-table .post-button {
+	width: 50px;
+	text-align: right;
+	padding-right: 10px;
+	padding-left: 10px;
+}
+
+table.stage-craft-table .post-title {
+	padding-left: 5%;
+}
+
+
+table.stage-craft-table .post-existing {
+	width: 100px;
+	text-align: center;
+}
