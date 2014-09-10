@@ -16,6 +16,8 @@ function stage_post_callback() {
 
 	print_r($ids);
 
+	echo 'hi';
+
 	// echo $quantity;
 
 	die(); // this is required to return a proper result

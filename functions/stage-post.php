@@ -82,6 +82,8 @@
 
 			add_post_meta($this->id, 'stage_parent', $this->parent_id);
 			add_post_meta($this->id, 'is_staged', 1);
+
+			update_post_meta($this->parent_id, 'is_stage_parent', 1);
 		}
 
 

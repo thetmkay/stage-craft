@@ -22,6 +22,10 @@ class StageCraft	{
 		add_action('admin_menu', 'register_stage_craft_menus_custom');
 		add_action('admin_menu', 'register_stage_craft_menus_post');
 		add_action( 'admin_enqueue_scripts', 'register_stage_craft_style' );
+		add_action('wp_trash_post', 'register_stage_craft_trash_check');
+		add_action('wp_trash_post', 'register_stage_craft_trash_check');
+		add_action('wp_untrash_post', 'register_stage_craft_untrash_check');
+		add_action('untrash_post', 'register_stage_craft_untrash_check');
 
 		function register_stage_craft_menus_custom() {
 
@@ -76,6 +80,7 @@ class StageCraft	{
 			render_posts_table($context);
 
 			include_posts_table_ajax($slug);
+			include_orphans_table_ajax($slug);
 
 			// add_meta_box($slug .'-menu', $title, 'render_main_meta_box', $slug, 'advanced', 'high');
 			// do_meta_boxes($slug , 'advanced', $post_type);
@@ -100,6 +105,53 @@ class StageCraft	{
 		    wp_enqueue_style( 'stage_craft_css');
 		}
 
+		function register_stage_craft_trash_check($id) {
+
+
+			if(get_post_meta($id, 'is_stage_parent', true) == 1) {
+
+				update_post_meta($id, 'is_stage_parent',-1);
+
+				$args = array(
+					'meta_key'         => 'stage_parent',
+					'meta_value'       => $id,
+					'post_status'	   => 'any');
+					$posts = get_posts($args);
+
+
+				foreach($posts as $post) {
+					orphan_stage_child($post, $id);
+				}
+			}
+		}
+
+		function register_stage_craft_untrash_check($id) {
+
+			if(get_post_meta($id, 'is_stage_parent', true) == (-1)) {
+
+				update_post_meta($id, 'is_stage_parent',1);
+
+				$args = array(
+					'meta_key'         => 'stage_parent',
+					'meta_value'       => (-$id),
+					'post_status'	   => 'any');
+					$posts = get_posts($args);
+
+
+				foreach($posts as $post) {
+					adopt_stage_child($post, $id);
+				}
+			}
+		}
+
+		function orphan_stage_child($post, $parent_id) {
+			update_post_meta($post->ID, 'stage_parent', -($parent_id));
+		}
+
+		function adopt_stage_child($post, $parent_id) {
+			update_post_meta($post->ID, 'stage_parent', $parent_id);
+		}
+
 	}
 
 	function include_files() {
@@ -108,9 +160,12 @@ class StageCraft	{
 
 		include('views/posts-row.php');
 		include('views/posts-table.php');
+		include('views/ajax/orphans-table-ajax.php');
 		include('views/ajax/posts-table-ajax.php');
 
-		include('api/posts-table-form.php');
+
+		include('api/stage-posts-controller.php');
+		include('api/trash-posts-controller.php');
 
 		include('functions/stage-post.php');
 
