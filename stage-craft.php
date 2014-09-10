@@ -1,8 +1,8 @@
 <?php
 /**
  * Plugin Name: Stage Craft
- * Plugin URI: http://github.com/thetmkay/stagecraft
- * Description: Dummy Post Generation.
+ * Plugin URI: http://github.com/thetmkay/stage-craft
+ * Description: Staged Post Generation.
  * Version: 0.1
  * Author: George Nishimura
  * Author URI: http://georgenishimura.com
